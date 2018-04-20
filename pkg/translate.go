@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/aerokite/go-google-translate/pkg/client"
+	"github.com/smirkcat/go-google-translate/pkg/client"
 )
 
 type TranslateRequest struct {
@@ -22,16 +22,15 @@ func Translate(req *TranslateRequest) (string, error) {
 	}
 	resp := client.NewClient(config).Translate(req.Text).Get().Do()
 	if resp.StatusCode != 200 {
-		return "", errors.New(fmt.Sprintf("Failed. Status:", resp.Status))
+		return "", fmt.Errorf("Failed.StatusCode %d Status:%s", resp.StatusCode, resp.Status)
 	}
 	respHtml := string(resp.ResponseBody)
-
 	re := regexp.MustCompile(`class="t0">(.*?)<`)
 	match := re.FindStringSubmatch(respHtml)
 	if len(match) != 2 {
 		return "", errors.New("Failed to translate")
 	}
-
 	translated := strings.Replace(match[1], "&quot;", "", -1)
+	translated = strings.Replace(translated, "&#39;", `'`, -1)
 	return translated, nil
 }

@@ -4,12 +4,14 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const (
-	Endpoint = "http://translate.google.com/"
+	Endpoint = "https://translate.google.cn/"
 	Uri      = "m"
 )
 
@@ -64,10 +66,15 @@ func NewClient(config *Config) *Client {
 
 func (c *Client) Translate(text string) *Translator {
 	client := &http.Client{
+		Timeout: time.Second * 30,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true,
 			},
+			Dial: (&net.Dialer{
+				Timeout:   30 * time.Second,
+				KeepAlive: 30 * time.Second,
+			}).Dial,
 		},
 	}
 

@@ -13,7 +13,7 @@ In **addition** this library provides a [cli](#cli) to translate text via consol
 # Installation
 
 ```sh
-$ go get -u -v github.com/aerokite/go-google-translate/...
+$ go get -u -v github.com/smirkcat/go-google-translate/...
 ```
 
 # Usage
@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"log"
 
-	trans "github.com/aerokite/go-google-translate/pkg"
+	trans "github.com/smirkcat/go-google-translate/pkg"
 )
 
 func main() {
